@@ -22,17 +22,21 @@ namespace ackTestApp
     public partial class Form1 : Form
     {
 
+        static string connstr = "Server=127.0.0.1;port=3306;Database=db_ack;Uid=root;pwd=1101";
+        MySqlConnection conn = new MySqlConnection(connstr);
 
         public Form1()
         {
             InitializeComponent();
             this.Load += Form1_Load;
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             dbSelect();
         }
+
 
 
         /// <summary>
@@ -45,8 +49,6 @@ namespace ackTestApp
         {
             try
             {
-                string connstr = "Server = 127.0.0.1;Port = 3306;Database=db_ack;Uid=root;pwd=1101";
-                MySqlConnection conn = new MySqlConnection(connstr);
 
                 DataTable dtChanges;
                 DataTable dtProcessFlag = (DataTable)dataGridView1.DataSource;
@@ -88,19 +90,20 @@ namespace ackTestApp
         /// </summary>
         public void dbSelect()
         {
-            string connstr = "Server=127.0.0.1;port=3306;Database=db_ack;Uid=root;pwd=1101";
-            MySqlConnection conn = new MySqlConnection(connstr);
 
             string sql = "select * from student";
             MySqlCommand cmd = new MySqlCommand(sql, conn);
-            
+
             conn.Open();
 
             MySqlDataAdapter adpt = new MySqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             adpt.Fill(dt);
-            dataGridView1.DataSource = dt;
+            student ds = new student(dt);
+            dataGridView1.DataSource = ds.dt;
             conn.Close();
+
+
         }
 
 
@@ -111,8 +114,7 @@ namespace ackTestApp
         {
             try
             {
-                string connstr = "Server = 127.0.0.1;Port = 3306;Database=db_ack;Uid=root;pwd=1101";
-                MySqlConnection conn = new MySqlConnection(connstr);
+
                 conn.Open();
 
                 DataTable dtChanges;
@@ -152,8 +154,7 @@ namespace ackTestApp
             {
                 return;
             }
-            string connstr = "Server = 127.0.0.1;Port = 3306;Database=db_ack;Uid=root;pwd=1101";
-            MySqlConnection conn = new MySqlConnection(connstr);
+
             conn.Open();
 
             String selectDeleteNo = dataGridView1.CurrentRow.Cells["no"].Value.ToString();
@@ -187,8 +188,8 @@ namespace ackTestApp
             dbDelete();
             dbSelect();
         }
-        
+
     }
-    
+
 }
 
